@@ -1,0 +1,40 @@
+- name: remove_swap_from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
+- name: disable_swap
+  command: swappoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: install_docker
+  shell: curl -fsSL https://get.docker.com | bash
+  notify:
+    - restart docker
+    - docker status
+
+- name: add_keys_repo_k8s
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: add_repo_k8s
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+
+- name: install_packages_kubeadm_kubelet_kubectl
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - kubelet
+    - kubeadm
+    - kubectl
+  notify:
+    - restart kubelet
+    - kubelet status

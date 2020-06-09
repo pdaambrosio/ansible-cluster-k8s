@@ -1,0 +1,6 @@
+---
+- hosts: k8s-master
+  become: yes
+  user: ubuntu
+  roles:
+  - { role: deploy-appv1, tags: ["deploy-appv1-role"] }

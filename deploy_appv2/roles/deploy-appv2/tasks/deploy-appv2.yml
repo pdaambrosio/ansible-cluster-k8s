@@ -1,0 +1,50 @@
+- name: install_pip
+  apt:
+    name:
+      - python-pip
+
+- name: install_dependecy
+  pip:
+    name:
+      - openshift
+      - PyYAML
+
+- name: copy_file_deploy_appv1
+  template:
+    src: app-v1.yml.j2
+    dest: /opt/giropops/appv1.yml
+    owner: root
+    group: root
+    mode: 0644
+  register: copy_deploy_appv1
+
+- name: copy_file_deploy_appv2
+  template:
+    src: app-v2.yml.j2
+    dest: /opt/giropops/appv2.yml
+    owner: root
+    group: root
+    mode: 0644
+  register: copy_deploy_appv2
+
+- name: deploy_appv2
+  k8s:
+    state: present
+    namespace: default
+    src: /opt/giropops/appv2.yml
+
+- name: scale_down_appv1
+  k8s:
+    state: present
+    namespace: default
+    src: /opt/giropops/appv1.yml
+
+- name: 02_minutes_appv1_remove press_control+c_to_cancel
+  pause:
+    minutes: 2
+
+- name: remove_appv1
+  k8s:
+    state: absent
+    namespace: default
+    src: /opt/giropops/appv1.yml

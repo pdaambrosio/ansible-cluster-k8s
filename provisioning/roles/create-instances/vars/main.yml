@@ -1,0 +1,9 @@
+---
+# vars file for create_instances
+instance_type: t2.micro
+sec_group_name: default
+image: ami-085925f297f89fce1
+keypar: MyWebServers
+region: us-east-1
+count: 3
+profile: default

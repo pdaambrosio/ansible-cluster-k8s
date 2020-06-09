@@ -1,0 +1,46 @@
+- name: reset_cluster
+  command:
+    kubeadm reset --force
+  register: kubeadm_reset
+
+- name: start_cluster_k8s
+  command:
+    kubeadm init --ignore-preflight-errors=NumCPU
+  register: kubeadm_init
+
+- name: create_dir_kube
+  file:
+    path: ~/.kube
+    state: directory
+
+- name: link_file_admin_conf_to_kube_config
+  file:
+    src: /etc/kubernetes/admin.conf
+    dest: ~/.kube/config
+    state: link
+
+- name: config_pod_network_weavenet
+  shell: kubectl apply -f {{ default_url_weavenet }}
+  register: weavenet_result
+
+- name: token_join_workers
+  shell: kubeadm token list |cut -d ' ' -f1 |sed -n '2p'
+  register: k8s_token
+
+- name: ca_hash
+  shell: openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt |openssl rsa -pubin -outform der 2>/dev/null |openssl dgst -sha256 -hex |sed 's/^.* //'
+  register: k8s_master_ca_hash
+
+- name: add_token_and_hash_in_dummy_host
+  add_host:
+    name: "K8S_TOKEN_HOLDER"
+    token: "{{ k8s_token.stdout }}"
+    hash: "{{ k8s_master_ca_hash.stdout }}"
+
+- name:
+  debug:
+    msg: "[MASTER] K8S_TOKEN_HOLDER - token is {{ hostvars['K8S_TOKEN_HOLDER']['token'] }}"
+
+- name:
+  debug:
+    msg: "[MASTER] K8S_TOKEN_HOLDER - hash is {{ hostvars['K8S_TOKEN_HOLDER']['hash'] }}"
