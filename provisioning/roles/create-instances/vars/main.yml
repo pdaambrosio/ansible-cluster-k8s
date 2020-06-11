@@ -1,9 +1,9 @@
 ---
 # vars file for create_instances
-instance_type: t2.micro
-sec_group_name: default
-image: ami-085925f297f89fce1
-keypar: MyWebServers
-region: us-east-1
-count: 3
-profile: default
+instance_type: t2.micro       # set instance
+sec_group_name: default       # set security group name
+image: ami-085925f297f89fce1  # set ami (Ubuntu)
+keypar: your_key_AWS_intance  # your AWS keypar for instances
+region: us-east-1             # region
+count: 3                      # number of instances (default 3)
+profile: default              # profile AWS CLI (boto)

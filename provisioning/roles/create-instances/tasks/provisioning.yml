@@ -1,4 +1,5 @@
 ---
+# Create security group for SSH access
 - name: create_sg
   local_action:
     module: ec2_group
