@@ -1,7 +1,3 @@
-# ansible-cluster-k8s
-
-This material is part of the Linuxtips course... #VAIII
-
 ### Cluster K8S
 
 These playbooks will do:
