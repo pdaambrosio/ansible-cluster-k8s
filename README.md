@@ -8,7 +8,6 @@ These playbooks will do:
 * Install kubeadm, kubectl and kubelet all nodes
 * Install Helm
 * Create kubernetes cluster with 01 master and 02 workes
-* Deploy appv1 and appv2 for testing
 
 ## Requirements
 
