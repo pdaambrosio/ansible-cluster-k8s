@@ -7,3 +7,4 @@ keypar: your_key_AWS_intance  # your AWS keypar for instances
 region: us-east-1             # region
 count: 3                      # number of instances (default 3)
 profile: default              # profile AWS CLI (boto)
+myip: your_ip_address         # SSH access

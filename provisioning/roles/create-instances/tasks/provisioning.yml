@@ -11,7 +11,7 @@
     - proto: tcp
       from_port: 22
       to_port: 22
-      cidr_ip: YOURIPADDRESS/32
+      cidr_ip: "{{ myip }}"
       rule_desc: SSH
     rules_egress:
     - proto: all
@@ -35,7 +35,7 @@
 - name: add_instances_to_temp
   add_host: 
     name: "{{ item.public_ip }}"
-    group: giropops-new
+    group: staging
   with_items: "{{ ec2.instances }}"
 
 - name: add_public_ip_to_hosts
